@@ -381,6 +381,78 @@
 //     </AuthProvider>
 //   );
 // }
+// import React from "react";
+// import { ToastContainer } from "react-toastify";
+// import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
+// import LoginRegister from "./pages/LoginRegister.jsx";
+// import Dashboard from "./pages/Dashboard.jsx";
+
+// function Main() {
+//   const { user, loading, logout } = useAuth();
+//   if (loading) return <div className="container py-4">Loading...</div>;
+
+//   return (
+//     <>
+//       <ToastContainer position="top-right" />
+//       {!user ? (
+//         // Full screen centered login/register
+//         <div
+//           className="d-flex justify-content-center align-items-center"
+//           style={{
+//             minHeight: "100vh",
+//             background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
+//             padding: "1rem",
+//           }}
+//         >
+//           <div
+//             className="card p-5 shadow-lg"
+//             style={{
+//               maxWidth: "400px",
+//               width: "100%",
+//               borderRadius: "12px",
+//               backgroundColor: "rgba(255, 255, 255, 0.95)",
+//               boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+//               transition: "transform 0.3s ease",
+//             }}
+//             onMouseEnter={(e) => {
+//               e.currentTarget.style.transform = "scale(1.05)";
+//               e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.3)";
+//             }}
+//             onMouseLeave={(e) => {
+//               e.currentTarget.style.transform = "scale(1)";
+//               e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.2)";
+//             }}
+//           >
+//             <h3 className="mb-4 text-center text-primary">Welcome Back</h3>
+//             <LoginRegister />
+//           </div>
+//         </div>
+//       ) : (
+//         // Dashboard with navbar
+//         <div className="container py-4">
+//           <div className="d-flex justify-content-between align-items-center mb-4">
+//             <h2 className="text-primary">Employee Management System </h2>
+//             <div>
+//               <span className="me-3">Hello, {user.username}</span>
+//               <button className="btn btn-outline-primary btn-sm" onClick={logout}>
+//                 Logout
+//               </button>
+//             </div>
+//           </div>
+//           <Dashboard />
+//         </div>
+//       )}
+//     </>
+//   );
+// }
+
+// export default function App() {
+//   return (
+//     <AuthProvider>
+//       <Main />
+//     </AuthProvider>
+//   );
+// }
 
 import React from "react";
 import { ToastContainer } from "react-toastify";
@@ -393,28 +465,76 @@ function Main() {
   if (loading) return <div className="container py-4">Loading...</div>;
 
   return (
-    <div className="container py-4">
+    <>
       <ToastContainer position="top-right" />
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Employee Manager</h2>
-        <div>
-          {user ? (
-            <>
-              <span className="me-3">Hello, {user.username}</span>
-              <button className="btn btn-sm btn-outline-secondary" onClick={logout}>Logout</button>
-            </>
-          ) : null}
+      {!user ? (
+        // Full screen centered login/register shifted right
+        <div
+          className="d-flex align-items-center justify-content-end"
+          style={{
+            minHeight: "100vh",
+            background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
+            padding: "1rem",
+            paddingRight: "5rem", // spacing from right edge
+          }}
+        >
+          <div
+            className="card p-5 shadow-lg"
+            style={{
+              maxWidth: "400px",
+              width: "100%",
+              borderRadius: "12px",
+              backgroundColor: "rgba(255, 255, 255, 0.95)",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+              transition: "transform 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.05)";
+              e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.2)";
+            }}
+          >
+            <h2 className="mb-4 text-primary text-center" style={{ fontWeight: "600" }}>
+              Employee Management System
+            </h2>
+            <LoginRegister />
+          </div>
         </div>
-      </div>
-
-      <div className="row">
-        <div className="col-md-4">{user ? null : <LoginRegister />}</div>
-        <div className="col-md-8">{user ? <Dashboard /> : <div className="alert alert-info">Please login or register</div>}</div>
-      </div>
-    </div>
+      ) : (
+        // Dashboard with navbar shifted right
+        <div
+          className="container py-4"
+          style={{
+            maxWidth: "900px",
+            marginLeft: "auto", // pushes container to the right side
+            marginRight: "3rem",
+          }}
+        >
+          <div className="d-flex justify-content-center align-items-center mb-4">
+            <h2 className="text-primary" style={{ fontWeight: "700" }}>
+              Employee Management System
+            </h2>
+            <div>
+              <span className="me-3 bold ">Hello, {user.username}</span>
+              <button className="btn btn-outline-primary btn-sm" onClick={logout}>
+                Logout
+              </button>
+            </div>
+          </div>
+          <Dashboard />
+        </div>
+      )}
+    </>
   );
 }
 
 export default function App() {
-  return <AuthProvider><Main /></AuthProvider>;
+  return (
+    <AuthProvider>
+      <Main />
+    </AuthProvider>
+  );
 }
