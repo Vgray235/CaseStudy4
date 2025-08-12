@@ -61,20 +61,25 @@
 
 // export default client; // ✅ Default export
 // export { connectRedis };
+
+
+// backend/config/redisClient.js
 import { createClient } from "redis";
 
-const url = process.env.REDIS_URL || "redis://localhost:6379";
+const redisUrl = process.env.REDIS_URL || "redis://localhost:6379";
 
-const client = createClient({ url, legacyMode: true });
+const redisClient = createClient({
+  url: redisUrl,
+});
 
-client.on("error", (err) => console.error("Redis Client Error", err));
-client.on("connect", () => console.log("✅ Redis client created"));
+redisClient.on("error", (err) => {
+  console.error("❌ Redis Client Error:", err);
+});
 
-async function connectRedis() {
-  if (!client.isOpen) {
-    await client.connect();
-    console.log("✅ Redis connected");
-  }
-}
+redisClient.on("connect", () => {
+  console.log("✅ Connected to Redis:", redisUrl);
+});
 
-export { client as redisClient, connectRedis };
+await redisClient.connect();
+
+export default redisClient;
